@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic sigma.js example</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+
+        #container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script src="./js/sigma.min.js"></script>
+
+<input type="button" style="z-index: 10000" value="hehey">
+<script>
+    // Let's first initialize sigma:
+    var s = new sigma('container');
+
+    var graphLength = 15;
+    var edgeCount = 150;
+
+    var getNodeId = function (index) {
+        if (index > graphLength - 1) {
+            index = graphLength - 1;
+        } else if (index < 0) {
+            index = 0;
+        }
+        return 'n' + index;
+    };
+    for (var i = 0; i < graphLength; i++) {
+        s.graph.addNode({
+            // Main attributes:
+            id: getNodeId(i),
+            label: 'Random_' + i,
+            // Display attributes:
+            x: Math.random(),
+            y: Math.random(),
+            size: 1,
+            color: '#f00'
+        });
+
+
+    }
+
+    for (var i = 0; i < edgeCount; i++) {
+
+        var target = Math.round(Math.random() * (graphLength - 1)) + 1;
+        var source = Math.round(Math.random() * (graphLength - 1)) + 1;
+        if (target == source) {//don not link point to self
+            if (target == 0) {
+                target++;
+            } else {
+                target--;
+            }
+        }
+        console.log('t:' + target + ', s:' + source);
+        s.graph.addEdge({
+            id: 'e' + i,
+            source: getNodeId(source),
+            target: getNodeId(target)
+        })
+    }
+    /*  // Then, let's add some data to display:
+     s.graph.addNode({
+     // Main attributes:
+     id: 'n0',
+     label: 'Hello',
+     // Display attributes:
+     target: 0,
+     source: 0,
+     size: 1,
+     color: '#f00'
+     }).addNode({
+     // Main attributes:
+     id: 'n1',
+     label: 'World !',
+     // Display attributes:
+     target: 1,
+     source: 1,
+     size: 1,
+     color: '#00f'
+     }).addEdge({
+     id: 'e0',
+     // Reference extremities:
+     source: 'n0',
+     target: 'n1'
+     });*/
+
+    // Finally, let's ask our sigma instance to refresh:
+    s.refresh();
+</script>
+</body>
+</html>
